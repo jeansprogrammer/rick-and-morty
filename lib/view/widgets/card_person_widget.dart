@@ -10,44 +10,64 @@ class CardPersonWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => CharacterDetailPage(character: character))),
-      child: Container(
-              height: 200,
-              decoration: BoxDecoration(
-                color: Colors.blue,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20)
-                    ),
-                    child: SizedBox(
-                      height: 160,
-                      width: MediaQuery.of(context).size.width,
-                      child: Image.network(
-                        character.image ?? '',
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 20, top: 7),
-                    child: Text(
-                      character.name ?? '',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => CharacterDetailPage(character: character),
+        ),
+      ),
+      child: Stack(
+        children: [
+          Container(
+            height: 200,
+            decoration: BoxDecoration(
+              color: Colors.blue,
+              borderRadius: BorderRadius.circular(20),
             ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                  ),
+                  child: SizedBox(
+                    height: 160,
+                    width: MediaQuery.of(context).size.width,
+                    child: Image.network(
+                      character.image ?? '',
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 20, top: 7),
+                  child: Text(
+                    character.name ?? '',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Row(
+            children: [
+              const Spacer(),
+              IconButton(
+                onPressed: () {
+                  // TODO: criar corpo da função
+                },
+                icon: Icon(Icons.favorite, color: Colors.red, size: 30),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
