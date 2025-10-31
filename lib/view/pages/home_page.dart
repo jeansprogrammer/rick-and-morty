@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:rick_and_morty/controller/favorite_controller.dart';
 import 'package:rick_and_morty/controller/home_controller.dart';
 import 'package:rick_and_morty/model/models/character_model.dart';
 import 'package:rick_and_morty/model/repository/character_repository.dart';
 import 'package:rick_and_morty/view/widgets/card_person_widget.dart';
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final FavoriteController favoriteController;
+
+  const MyApp({super.key, required this.favoriteController});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const HomePage(
+      home: HomePage(
+        favoriteController: favoriteController,
         homeController: HomeController(
           characterRepository: CharacterRepository(
             baseUrl: "https://rickandmortyapi.com/api",
@@ -23,8 +27,9 @@ class MyApp extends StatelessWidget {
 }
 
 class HomePage extends StatefulWidget {
+  final FavoriteController favoriteController;
   final HomeController homeController;
-  const HomePage({super.key, required this.homeController});
+  const HomePage({super.key, required this.homeController, required this.favoriteController});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -66,6 +71,7 @@ class _HomePageState extends State<HomePage> {
               child: ListView.separated(
                 itemBuilder: (context, index) => CardPersonWidget(
                   character: listCharacter[index],
+                  favoriteController: FavoriteController(),
                 ),
                 separatorBuilder: (contex, index) => const SizedBox(height: 20),
                 itemCount: listCharacter.length,

@@ -1,19 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:rick_and_morty/controller/favorite_controller.dart';
 import 'package:rick_and_morty/model/models/character_model.dart';
 import 'package:rick_and_morty/view/pages/character_detail_page.dart';
 
-class CardPersonWidget extends StatelessWidget {
+class CardPersonWidget extends StatefulWidget {
   final CharacterModel character;
+  final FavoriteController favoriteController;
 
-  const CardPersonWidget({super.key, required this.character});
+  const CardPersonWidget({
+    super.key,
+    required this.character,
+    required this.favoriteController,
+  });
 
   @override
+  State<CardPersonWidget> createState() => _CardPersonWidgetState();
+}
+
+class _CardPersonWidgetState extends State<CardPersonWidget> {
+  @override
   Widget build(BuildContext context) {
+    final isFavorite = widget.favoriteController.favoritesCharacterIds.contains(
+      widget.character.id,
+    );
     return GestureDetector(
       onTap: () => Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => CharacterDetailPage(character: character),
+          builder: (context) => CharacterDetailPage(character: widget.character),
         ),
       ),
       child: Stack(
@@ -36,7 +50,7 @@ class CardPersonWidget extends StatelessWidget {
                     height: 160,
                     width: MediaQuery.of(context).size.width,
                     child: Image.network(
-                      character.image ?? '',
+                      widget.character.image ?? '',
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -44,7 +58,7 @@ class CardPersonWidget extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(left: 20, top: 7),
                   child: Text(
-                    character.name ?? '',
+                    widget.character.name ?? '',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 20,
@@ -60,9 +74,15 @@ class CardPersonWidget extends StatelessWidget {
               const Spacer(),
               IconButton(
                 onPressed: () {
-                  // TODO: criar corpo da função
+                  setState(() {
+                    if(isFavorite){
+                       widget.favoriteController.removeFavorite(widget.character.id);
+                    } else {
+                       widget.favoriteController.addFavorite(widget.character.id);
+                    }
+                  });
                 },
-                icon: Icon(Icons.favorite, color: Colors.red, size: 30),
+                icon: Icon(isFavorite ? Icons.favorite : Icons.favorite_border_outlined, color: isFavorite ? Colors.red : Colors.grey),
               ),
             ],
           ),
